@@ -1,5 +1,8 @@
 name: Build APK
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
 permissions:
   contents: write
 jobs:
@@ -7,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Descompactar
-        run: unzip -q AuraLauncher.zip
+      - name: Descompactar (se enviou o zip)
+        run: |
+          if [ -f FileManagerTV.zip ]; then unzip -q -o FileManagerTV.zip; fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -17,13 +21,12 @@ jobs:
         with:
           gradle-version: 8.9
       - name: Compilar
-        working-directory: AuraLauncher
         run: gradle assembleDebug --no-daemon
       - name: Renomear
-        run: cp AuraLauncher/app/build/outputs/apk/debug/app-debug.apk aura-launcher.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk file-manager-tv.apk
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: Aura Launcher ${{ github.run_number }}
-          files: aura-launcher.apk
+          name: File Manager TV ${{ github.run_number }}
+          files: file-manager-tv.apk
           make_latest: true
