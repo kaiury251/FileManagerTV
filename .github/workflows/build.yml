@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Descompactar
-        run: unzip -q -o FileManagerTV.zip -d proj
+        run: unzip -q -o FileManager-celular.zip -d proj
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -29,6 +29,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: File Manager TV ${{ github.run_number }}
-          files: file-manager-tv.apk
+          name: File Manager celular ${{ github.run_number }}
+          files: file-manager-celular.apk
           make_latest: true
